@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "581608179707",
+    "firebase_url": "https://expenfilit.firebaseio.com",
+    "project_id": "expenfilit",
+    "storage_bucket": "expenfilit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581608179707:android:8b8a3b22d53d09f4de6d5e",
+        "android_client_info": {
+          "package_name": "com.example.expenfilit_v1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "581608179707-99792mh8uinfmvv0lhvj4nrhov4flk09.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFSx1SrY9qmvvGPTyDGVip86cqLuljqKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "581608179707-99792mh8uinfmvv0lhvj4nrhov4flk09.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
