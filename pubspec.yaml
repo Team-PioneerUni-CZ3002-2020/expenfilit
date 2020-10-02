@@ -1,4 +1,4 @@
-name: expenfilit_v1
+name: Expenfilit
 description: A personal finance app
 
 # The following line prevents the package from being accidentally published to
@@ -23,19 +23,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_widgets: any
-  firebase_auth: ^0.14.0+5
-  cloud_firestore: ^0.13.0+1
-  firebase_database: ^3.0.7
-  provider: ^3.1.0
-  firebase_storage: ^3.0.8
+  firebase_core: ^0.5.0
+  firebase_auth: ^0.18.1
+  cloud_firestore: ^0.14.0+2
+  provider: ^4.3.2+2
   path: ^1.6.4
   uuid: ^2.0.4
   url_launcher: ^5.4.2
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
+  cupertino_icons: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -54,7 +51,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-  - assets/esymbol.jpg
+   - assets/esymbol.jpg
+  #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

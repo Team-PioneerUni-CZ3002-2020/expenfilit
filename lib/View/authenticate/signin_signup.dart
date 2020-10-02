@@ -1,8 +1,5 @@
-import 'package:expenfilit_v1/Controller/expenfilit_notifier.dart';
-import 'package:expenfilit_v1/Controller/auth_notifier.dart';
-import 'package:expenfilit_v1/Model/user.dart';
+import 'package:Expenfilit/Controller/auth_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 enum AuthMode { Signup, Login, Reset }
 
@@ -14,39 +11,35 @@ class Signinsignup extends StatefulWidget {
 }
 
 class _SigninsignupState extends State<Signinsignup> {
+  final AuthController _auth = AuthController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = new TextEditingController();
   AuthMode _authMode = AuthMode.Login;
   bool rState = true;
   bool spwState = true;
-  User _user = User();
+  String displayName = '';
+  String email = '';
+  String password = '';
   String errorMessage = ' ';
 
   ///Pop up Dialog when user choose to resets their password
-  void _sendPwLinkDialog(){
+  void _sendPwLinkDialog() {
     showDialog(
         context: context,
-        builder: (BuildContext context){
+        builder: (BuildContext context) {
           return AlertDialog(
             title: Text("Reset password link sent to email !"),
             actions: <Widget>[
               MaterialButton(
                 elevation: 5.0,
                 child: Text('Close'),
-                onPressed: (){
+                onPressed: () {
                   Navigator.pop(context);
                 },
               )
             ],
           );
         });
-  }
-
-  @override
-  void initState() {
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
-    initializeCurrentUser(authNotifier);
-    super.initState();
   }
 
   ///Submits data based on user's Auth Mode
@@ -56,72 +49,74 @@ class _SigninsignupState extends State<Signinsignup> {
     }
 
     _formKey.currentState.save();
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    //AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
 
     if (_authMode == AuthMode.Login) {
-      login(_user, authNotifier);
-    }
-    else if (_authMode == AuthMode.Reset) {
-
-      sendPasswordResetEmail(_user);
+      _auth.signinEmail(email, password);
+    } else if (_authMode == AuthMode.Reset) {
+      _auth.sendPasswordResetEmail(email);
       _sendPwLinkDialog();
 
       setState(() {
         _authMode = AuthMode.Login;
       });
-    }
-    else {
-      signup(_user, authNotifier);
+    } else {
+      _auth.signupEmailPassword(email, password, displayName);
       setState(() {
         _passwordController.clear(); //Clear value
         _authMode =
-        _authMode == AuthMode.Login ? AuthMode.Signup : AuthMode.Login;
+            _authMode == AuthMode.Login ? AuthMode.Signup : AuthMode.Login;
       });
       _createAlertDialog(context);
     }
   }
 
   ///Pop up Dialog for login errors
-  Future<String> _createLoginErrorAlertDialog(BuildContext context){
-    return showDialog(context: context, builder: (context){
-      return AlertDialog(
-        title: Text("Invalid Credentials!"),
-        actions: <Widget>[
-          MaterialButton(
-            elevation: 5.0,
-            child: Text('Okay'),
-            onPressed: (){
-              Navigator.pop(context);
-            },
-          )
-        ],
-      );
-    });
+  Future<String> _createLoginErrorAlertDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Invalid Credentials!"),
+            actions: <Widget>[
+              MaterialButton(
+                elevation: 5.0,
+                child: Text('Okay'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
   }
 
   ///Pop up Dialog upon successful creation of Expenfilit account
-  Future<String> _createAlertDialog(BuildContext context){
-    return showDialog(context: context, builder: (context){
-      return AlertDialog(
-        title: Text("Account Created! Please verify your email address before logging in !"),
-        actions: <Widget>[
-          MaterialButton(
-            elevation: 5.0,
-            child: Text('Okay'),
-            onPressed: (){
-              Navigator.pop(context);
-            },
-          )
-        ],
-      );
-    });
+  Future<String> _createAlertDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+                "Account Created! Please verify your email address before logging in !"),
+            actions: <Widget>[
+              MaterialButton(
+                elevation: 5.0,
+                child: Text('Okay'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
   }
 
   ///User's username text field with validation
   Widget _buildDisplayNameField() {
     return TextFormField(
       decoration: InputDecoration(
-        labelText: "Username",
+        labelText: "Username (Display Name)",
         labelStyle: TextStyle(color: Colors.teal[650]),
       ),
       keyboardType: TextInputType.text,
@@ -131,13 +126,13 @@ class _SigninsignupState extends State<Signinsignup> {
         if (value.isEmpty) {
           return 'Username is required';
         }
-        if (value.length < 6 ){
+        if (value.length < 6) {
           return 'Username is too short';
         }
         return null;
       },
       onSaved: (String value) {
-        _user.username = value;
+        displayName = value;
       },
     );
   }
@@ -157,7 +152,8 @@ class _SigninsignupState extends State<Signinsignup> {
         if (value.isEmpty) {
           return 'Email is required';
         }
-        if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+        if (!RegExp(
+                r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
             .hasMatch(value)) {
           return 'Please enter a valid email address';
         }
@@ -165,7 +161,7 @@ class _SigninsignupState extends State<Signinsignup> {
         return null;
       },
       onSaved: (String value) {
-        _user.email = value;
+        email = value;
       },
     );
   }
@@ -186,16 +182,17 @@ class _SigninsignupState extends State<Signinsignup> {
         if (value.isEmpty) {
           return 'Password is required';
         }
-        if (value.length < 6 ) {
+        if (value.length < 6) {
           return 'Password is too short. At least 6 characters is needed.';
         }
-        if (!RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)").hasMatch(value)) {
+        if (!RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)")
+            .hasMatch(value)) {
           return 'Required: At least 1 digit, symbol, lowercase & uppercase character';
         }
         return null;
       },
       onSaved: (String value) {
-        _user.password = value;
+        password = value;
       },
     );
   }
@@ -220,11 +217,11 @@ class _SigninsignupState extends State<Signinsignup> {
   }
 
   ///Checks User's Auth Mode at _submitForm() before submitting data
-  String submitButton(){
-    if (_authMode == AuthMode.Reset){
+  String submitButton() {
+    if (_authMode == AuthMode.Reset) {
       return 'Reset';
-    }
-    else return _authMode == AuthMode.Login ? 'Login' : 'Signup';
+    } else
+      return _authMode == AuthMode.Login ? 'Login' : 'Signup';
   }
 
   ///Login Main UI
@@ -236,9 +233,7 @@ class _SigninsignupState extends State<Signinsignup> {
         constraints: BoxConstraints.expand(
           height: MediaQuery.of(context).size.height,
         ),
-
         decoration: BoxDecoration(color: Colors.white54),
-
         child: Form(
           autovalidate: true,
           key: _formKey,
@@ -250,22 +245,29 @@ class _SigninsignupState extends State<Signinsignup> {
                   Image.asset(
                     'assets/esymbol.jpg',
                     width: 100,
-                    height:100,
+                    height: 100,
                   ),
                   SizedBox(height: 10),
                   Text(
                     "Expenfilit",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 22, color: Colors.teal[400], fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.teal[400],
+                        fontWeight: FontWeight.bold),
                   ),
-
                   SizedBox(height: 25),
-                  _authMode == AuthMode.Signup ? _buildDisplayNameField() : Container(),
+                  _authMode == AuthMode.Signup
+                      ? _buildDisplayNameField()
+                      : Container(),
                   _buildEmailField(),
-                  _authMode == AuthMode.Reset ?  Container():_buildPasswordField(),
-                  _authMode == AuthMode.Signup ? _buildConfirmPasswordField() : Container(),
+                  _authMode == AuthMode.Reset
+                      ? Container()
+                      : _buildPasswordField(),
+                  _authMode == AuthMode.Signup
+                      ? _buildConfirmPasswordField()
+                      : Container(),
                   SizedBox(height: 32),
-
                   Visibility(
                     visible: rState,
                     child: Column(
@@ -277,8 +279,11 @@ class _SigninsignupState extends State<Signinsignup> {
                             padding: EdgeInsets.all(8.0),
                             onPressed: () => _submitForm(),
                             child: Text(
-                              _authMode == AuthMode.Login ?  'Sign In' : 'Create New Account' ,
-                              style: TextStyle(fontSize: 21, color: Colors.white),
+                              _authMode == AuthMode.Login
+                                  ? 'Sign In'
+                                  : 'Create New Account',
+                              style:
+                                  TextStyle(fontSize: 21, color: Colors.white),
                             ),
                           ),
                         ),
@@ -289,12 +294,12 @@ class _SigninsignupState extends State<Signinsignup> {
                             child: Text(
                               //Have switch to
                               '${_authMode == AuthMode.Signup ? 'Sign In' : 'Create New Account'}',
-                              style: TextStyle(fontSize: 21, color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 21, color: Colors.white),
                             ),
                             onPressed: () {
                               setState(() {
-                                _authMode =
-                                _authMode == AuthMode.Login
+                                _authMode = _authMode == AuthMode.Login
                                     ? AuthMode.Signup
                                     : AuthMode.Login;
                               });
@@ -304,7 +309,6 @@ class _SigninsignupState extends State<Signinsignup> {
                       ],
                     ),
                   ),
-
                   Visibility(
                     visible: !rState,
                     child: ButtonTheme(
@@ -319,16 +323,16 @@ class _SigninsignupState extends State<Signinsignup> {
                             spwState = true;
                           });
                         },
-                        child: Text( 'Send Reset Password Link' ,
+                        child: Text(
+                          'Send Reset Password Link',
                           style: TextStyle(fontSize: 21, color: Colors.white),
                         ),
                       ),
                     ),
                   ),
-
                   Visibility(
                     visible: spwState,
-                    child:ButtonTheme(
+                    child: ButtonTheme(
                       child: FlatButton(
                         color: Colors.white,
                         padding: EdgeInsets.all(5.0),
@@ -346,7 +350,6 @@ class _SigninsignupState extends State<Signinsignup> {
                       ),
                     ),
                   ),
-
                   Visibility(
                     visible: !spwState,
                     child: ButtonTheme(

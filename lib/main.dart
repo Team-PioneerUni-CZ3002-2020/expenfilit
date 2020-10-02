@@ -1,40 +1,33 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:expenfilit_v1/Controller/expenfilit_notifier.dart';
-import 'package:expenfilit_v1/Controller/auth_notifier.dart';
-import 'package:expenfilit_v1/Model/user.dart';
-import 'package:expenfilit_v1/View/signin_signup.dart';
+import 'package:Expenfilit/Model/user.dart';
 import 'package:provider/provider.dart';
-
-import 'View/homepage.dart';
+import 'Controller/auth_controller.dart';
+import 'View/wrapper.dart';
 
 ///Notify Auth, Review and Favourite Notifiers
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(
-        builder: (context) => AuthNotifier(),
-      )
-    ],
-    child: MyApp(),
-  ));
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Expenfilit',
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-        accentColor: Colors.tealAccent,
-      ),
-      home: Consumer<AuthNotifier>(
-        builder: (context, notifier, child) {
-          return notifier.user != null ? HomePage() : Signinsignup();
-        },
+    return StreamProvider<SessionUser>.value(
+      value: AuthController().user,
+      child: MaterialApp(
+        title: 'Expenfilit',
+        theme: ThemeData(
+          primarySwatch: Colors.teal,
+          accentColor: Colors.tealAccent,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+        ),
+        home: Wrapper(),
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

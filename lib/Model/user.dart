@@ -1,8 +1,8 @@
+class SessionUser {
+  final String uid;
+  final String displayName;
+  final String email;
+  final int points;
 
-///User Attributes
-class User {
-  String email;
-  String password;
-  String username;
-  User();
+  SessionUser({this.uid, this.displayName, this.email, this.points});
 }
