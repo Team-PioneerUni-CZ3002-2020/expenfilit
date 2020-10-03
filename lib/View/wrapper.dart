@@ -8,7 +8,7 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<SessionUser>(context);
-    print(user);
+    //print(user);
     // return either the Home or Authenticate widget
     return user == null ? Signinsignup() : HomePage();
   }

@@ -14,7 +14,7 @@ class DatabaseController {
       FirebaseFirestore.instance.collection('users');
 
   Future updateUserData(String displayName, String email, String uid) async {
-    return await userCollection.doc(displayName).set({
+    return await userCollection.doc(uid).set({
       'uid': userUid,
       'displayName': displayName,
       'email': email,
@@ -48,12 +48,18 @@ class DatabaseController {
     return SessionUser(
         uid: userUid,
         displayName: snapshot.data()['displayName'],
-        email: snapshot.data()['email'],
-        points: snapshot.data()['points']);
+        email: snapshot.data()['email']
+        // points: snapshot.data()['points']
+        );
+  }
+
+  // get user doc stream
+  Stream<SessionUser> get userData {
+    return userCollection.doc(userUid).snapshots().map(_userDataFromSnapshot);
   }
 
   // get brews stream
-  Stream<List<Account>> get brews {
+  Stream<List<Account>> get accounts {
     return accountCollection.snapshots().map(_accListFromSnapshot);
   }
 }

@@ -8,7 +8,10 @@ class AuthController {
 
   // create user obj based on FirebaseUser
   SessionUser _userFromFirebaseUser(User user) {
-    return user != null ? SessionUser(uid: user.uid) : null;
+    return user != null
+        ? SessionUser(
+            uid: user.uid, email: user.email, displayName: user.displayName)
+        : null;
   }
 
   ///User login ; will only be granted after user verify their email address.
