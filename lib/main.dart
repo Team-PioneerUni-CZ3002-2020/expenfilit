@@ -21,8 +21,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Expenfilit',
         theme: ThemeData(
+          fontFamily: 'Inter',
           primarySwatch: Colors.teal,
-          accentColor: Colors.tealAccent,
+          accentColor: Colors.yellowAccent,
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
         ),

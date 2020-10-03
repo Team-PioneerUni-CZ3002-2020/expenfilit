@@ -6,6 +6,7 @@ import 'package:Expenfilit/View/settings/setting_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:Expenfilit/Helpers/constants.dart';
 import 'home_tab.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     return StreamProvider<SessionUser>.value(
       value: DatabaseController(userUid: user.uid).userData,
       child: Scaffold(
-        backgroundColor: Color.fromRGBO(230, 236, 240, 1),
+        backgroundColor: themeGreyWhite,
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedTab,
           items: const <BottomNavigationBarItem>[
@@ -48,8 +49,8 @@ class _HomePageState extends State<HomePage> {
           },
           showUnselectedLabels: true,
           iconSize: 30,
-          selectedItemColor: Color.fromRGBO(64, 123, 252, 1),
-          unselectedItemColor: Color.fromRGBO(101, 119, 134, 1),
+          selectedItemColor: hghlgtBlue,
+          unselectedItemColor: icUnselectGrey,
           unselectedFontSize: 12.0,
           selectedFontSize: 12.0,
           type: BottomNavigationBarType.fixed,

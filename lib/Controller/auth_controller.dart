@@ -57,7 +57,7 @@ class AuthController {
           await dbController.updateUserData(
               displayName, email, firebaseUser.uid);
           await dbController.updateUserTxnData(
-              Uuid().v4(), "Wallet", null, null, firebaseUser.uid);
+              Uuid().v4(), "Default Account", null, null, firebaseUser.uid);
           return _userFromFirebaseUser(firebaseUser);
         }
       }
