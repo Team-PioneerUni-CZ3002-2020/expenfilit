@@ -22,12 +22,12 @@ class DatabaseController {
     });
   }
 
-  Future updateUserTxnData(String accUuid, String accName, String accType,
+  Future updateUserTxnData(String accUuid, String name, String type,
       double balance, String userUid) async {
     return await accountCollection.doc(accUuid).set({
       'accUuid': accUuid,
-      'accName': accName,
-      'accType': accType == null ? "Wallet" : accType,
+      'accName': name,
+      'accType': type == null ? "Wallet" : type,
       'balance': balance == null ? 0.0 : balance,
       'userUid': userUid,
     });
@@ -36,8 +36,8 @@ class DatabaseController {
   List<Account> _accListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Account(
-        accName: doc.data()['accName'] ?? '',
-        accType: doc.data()['accType'] ?? 'Wallet',
+        name: doc.data()['accName'] ?? '',
+        type: doc.data()['accType'] ?? 'Wallet',
         balance: doc.data()['balance'] ?? 0,
       );
     }).toList();

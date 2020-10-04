@@ -88,21 +88,23 @@ class SettingsTab extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                    flex: 3,
-                    child: Center(
-                      child: FlatButton(
-                        child:
-                            Text('Log Out', style: TextStyle(color: hghlgtRed)),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 145.0, vertical: 15.0),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: BorderSide(color: hghlgtRed)),
-                        onPressed: () async {
-                          await _auth.signOut();
-                        },
-                      ),
-                    ))
+                  flex: 3,
+                  child: Center(
+                    child: FlatButton(
+                      child: Text('Log Out',
+                          style: TextStyle(
+                              color: hghlgtRed, fontWeight: FontWeight.w800)),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 145.0, vertical: 15.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(color: hghlgtRed, width: 2)),
+                      onPressed: () async {
+                        await _auth.signOut();
+                      },
+                    ),
+                  ),
+                )
               ]),
             ),
           );

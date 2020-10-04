@@ -1,10 +1,13 @@
 class Account {
-  final String accUuid;
-  final String accName;
-  final String accType;
-  final int balance;
-  final String userUid;
+  final String accUuid, name, type, currency, userUid;
+  final double balance;
 
-  Account(
-      {this.accUuid, this.accName, this.accType, this.balance, this.userUid});
+  Account({
+    this.accUuid,
+    this.name,
+    this.type,
+    this.currency,
+    this.balance,
+    this.userUid,
+  });
 }

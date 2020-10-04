@@ -1,13 +1,13 @@
 import 'package:Expenfilit/Controller/database_controller.dart';
 import 'package:Expenfilit/Model/user.dart';
-import 'package:Expenfilit/View/accounts/account_tab.dart';
-import 'package:Expenfilit/View/challenges/challenge_tab.dart';
-import 'package:Expenfilit/View/settings/setting_tab.dart';
+import 'package:Expenfilit/View/accounts/tab_account.dart';
+import 'package:Expenfilit/View/challenges/tab_challenge.dart';
+import 'package:Expenfilit/View/settings/tab_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:Expenfilit/Helpers/constants.dart';
-import 'home_tab.dart';
+import 'tab_home.dart';
 
 class HomePage extends StatefulWidget {
   @override
