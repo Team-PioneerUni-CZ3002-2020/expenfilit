@@ -1,28 +1,20 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/widgets.dart';
 import 'package:Expenfilit/Controller/database_controller.dart';
 import 'package:Expenfilit/Model/user.dart';
-import 'package:Expenfilit/View/accounts/tab_account.dart';
-import 'package:Expenfilit/View/challenges/tab_challenge.dart';
-import 'package:Expenfilit/View/settings/tab_setting.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
-import 'package:Expenfilit/Helpers/constants.dart';
-import 'tab_home.dart';
+import 'package:Expenfilit/View/components/navigator/model_destination.dart';
+import 'package:Expenfilit/View/components/navigator/navigator_destination.dart';
+import 'package:Expenfilit/View/components/colours.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final List<Widget> screens = [
-    HomeTab(),
-    AccountsTab(),
-    ChallengesTab(),
-    SettingsTab()
-  ]; // screens for each tab
-
-  int selectedTab = 0;
+class _HomePageState extends State<HomePage>
+    with TickerProviderStateMixin<HomePage> {
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -32,30 +24,34 @@ class _HomePageState extends State<HomePage> {
       value: DatabaseController(userUid: user.uid).userData,
       child: Scaffold(
         backgroundColor: themeGreyWhite,
+        body: SafeArea(
+          top: false,
+          child: IndexedStack(
+            index: _currentIndex,
+            children: allDestinations.map<Widget>((Destination destination) {
+              return DestinationNavigator(destination: destination);
+            }).toList(),
+          ),
+        ),
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedTab,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.payment), label: 'Accounts'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.military_tech), label: 'Challenges'),
-            BottomNavigationBarItem(icon: Icon(Icons.face), label: 'You')
-          ],
+          currentIndex: _currentIndex,
           onTap: (i) => {
             setState(() {
-              selectedTab = i;
+              _currentIndex = i;
             })
           },
+          items: allDestinations.map((Destination destination) {
+            return BottomNavigationBarItem(
+                icon: Icon(destination.icon), label: destination.label);
+          }).toList(),
           showUnselectedLabels: true,
-          iconSize: 30,
+          iconSize: 26,
           selectedItemColor: hghlgtBlue,
           unselectedItemColor: icUnselectGrey,
-          unselectedFontSize: 12.0,
-          selectedFontSize: 12.0,
+          unselectedFontSize: 10.0,
+          selectedFontSize: 10.0,
           type: BottomNavigationBarType.fixed,
         ),
-        body: screens[selectedTab],
       ),
     );
   }

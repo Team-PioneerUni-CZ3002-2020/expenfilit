@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:Expenfilit/Model/user.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'Controller/auth_controller.dart';
 import 'View/wrapper.dart';
@@ -16,6 +17,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     return StreamProvider<SessionUser>.value(
       value: AuthController().user,
       child: MaterialApp(

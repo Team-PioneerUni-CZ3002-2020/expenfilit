@@ -1,14 +1,16 @@
-import 'package:Expenfilit/Helpers/header_background.dart';
-import 'package:Expenfilit/Helpers/loading.dart';
-import 'package:Expenfilit/Model/account.dart';
-import 'package:Expenfilit/Model/user.dart';
-import 'package:Expenfilit/View/accounts/component_acc_cat.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:Expenfilit/Helpers/constants.dart';
 import 'package:intl/intl.dart';
+import 'package:Expenfilit/Model/account.dart';
+import 'package:Expenfilit/Model/user.dart';
+import 'package:Expenfilit/View/components/headers.dart';
+import 'package:Expenfilit/View/components/loading.dart';
+import 'package:Expenfilit/View/accounts/component_acc_cat.dart';
+import 'package:Expenfilit/View/components/colours.dart';
 
 class AccountsTab extends StatelessWidget {
+  const AccountsTab({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<SessionUser>(context);
@@ -49,113 +51,50 @@ class AccountsTab extends StatelessWidget {
 
     return user == null
         ? Loading()
-        : NotificationListener<OverscrollIndicatorNotification>(
-            onNotification: (OverscrollIndicatorNotification overscroll) {
-              overscroll.disallowGlow();
-
-              return false;
-            },
-            child: SingleChildScrollView(
-              physics: ClampingScrollPhysics(),
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    // -------- vvv HEADER vvv -------- //
-                    Container(
-                      // flex: 3,
-                      height: (MediaQuery.of(context).size.height / 15) * 3,
-                      margin: EdgeInsets.only(bottom: 15),
-                      child: Stack(children: <Widget>[
-                        headerBackground,
-                        Container(
-                          padding: EdgeInsets.only(left: 25, right: 20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "TOTAL",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: hghlgtYellow,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  FlatButton(
-                                    onPressed: () {
-                                      print('onAddAccount pressed');
-                                      // onAddAccount();
-                                    },
-                                    child: Text(
-                                      'ADD ACCOUNT',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    padding: EdgeInsets.all(0),
-                                  )
-                                ],
+        : Scaffold(
+            backgroundColor: themeGreyWhite,
+            body: NotificationListener<OverscrollIndicatorNotification>(
+              onNotification: (OverscrollIndicatorNotification overscroll) {
+                overscroll.disallowGlow();
+                return false;
+              },
+              child: SingleChildScrollView(
+                physics: ClampingScrollPhysics(),
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      BluePatternHeader(assetSum: assetSum),
+                      // AccountCategory(acc: accounts[0]),
+                      ...getAccountCategories(types),
+                      // -------- vvv BOTTOM | ADD ACCOUNT BTN vvv -------- //
+                      ConstrainedBox(
+                        constraints:
+                            const BoxConstraints(minWidth: double.infinity),
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                              vertical: 35, horizontal: 20),
+                          child: FlatButton(
+                            child: Text(
+                              'Add Account',
+                              style: TextStyle(
+                                color: themeDarkerBlack,
+                                fontWeight: FontWeight.w800,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    // '\$0.00',
-                                    assetSum,
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ]),
-                    ),
-                    // -------- ^^^ HEADER ^^^ -------- //
-
-                    // AccountCategory(acc: accounts[0]),
-                    ...getAccountCategories(types),
-
-                    // -------- vvv BOTTOM | ADD ACCOUNT BTN vvv -------- //
-                    ConstrainedBox(
-                      constraints:
-                          const BoxConstraints(minWidth: double.infinity),
-                      child: Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 35, horizontal: 20),
-                        child: FlatButton(
-                          child: Text(
-                            'Add Account',
-                            style: TextStyle(
-                              color: themeDarkerBlack,
-                              fontWeight: FontWeight.w800,
                             ),
+                            padding: EdgeInsets.symmetric(vertical: 15.0),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: BorderSide(
+                                    color: themeDarkerBlack, width: 3)),
+                            onPressed: () {
+                              Navigator.pushNamed(context, "/addAccount");
+                            },
                           ),
-                          padding: EdgeInsets.symmetric(vertical: 15.0),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(
-                                  color: themeDarkerBlack, width: 3)),
-                          onPressed: () {
-                            print("add account pressed");
-                          },
                         ),
-                      ),
-                    )
-                    // -------- ^^^ BOTTOM | ADD ACCOUNT BTN ^^^ -------- //
-                  ],
+                      )
+                      // -------- ^^^ BOTTOM | ADD ACCOUNT BTN ^^^ -------- //
+                    ],
+                  ),
                 ),
               ),
             ),

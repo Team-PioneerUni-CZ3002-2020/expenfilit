@@ -10,3 +10,4 @@ const themeGreyWhite = Color(0xFFE6ECF0);
 const icUnselectGrey = Color(0xFF657786);
 const themeDarkBlack = Color(0xFF38444D);
 const themeDarkerBlack = Color(0xFF010838);
+const themeBlack = Color(0xFF15202B);

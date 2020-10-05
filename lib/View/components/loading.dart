@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:Expenfilit/Helpers/constants.dart';
+import 'package:Expenfilit/View/components/colours.dart';
 
 class Loading extends StatelessWidget {
   @override

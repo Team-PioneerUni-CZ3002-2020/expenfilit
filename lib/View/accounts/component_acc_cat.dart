@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:Expenfilit/Model/account.dart';
 import 'package:intl/intl.dart';
-import 'package:Expenfilit/Helpers/constants.dart';
+import 'package:Expenfilit/View/components/colours.dart';
 
 class AccountCategory extends StatelessWidget {
   final List<Account> accounts;
@@ -59,11 +59,13 @@ class AccountCategory extends StatelessWidget {
 }
 
 class AccGridCard extends StatelessWidget {
+  final String accCardType;
   final Account acc;
   final Function press;
 
   const AccGridCard({
     Key key,
+    this.accCardType,
     this.acc,
     this.press,
   }) : super(key: key);
@@ -73,7 +75,10 @@ class AccGridCard extends StatelessWidget {
     final moneyFm = new NumberFormat.currency(symbol: "");
 
     var cardColor = hghlgtBlue;
-    switch (acc.type) {
+
+    final isAccountInfoCard = acc == null;
+
+    switch (isAccountInfoCard ? accCardType : acc.type) {
       case 'Bank Account':
         cardColor = graphBlue;
         break;
@@ -87,39 +92,65 @@ class AccGridCard extends StatelessWidget {
         cardColor = hghlgtGreen;
         break;
       case 'Cash Wallet':
+      case 'Cash':
         cardColor = hghlgtBlue;
+        break;
+      case 'Insurance':
+        cardColor = icUnselectGrey;
         break;
       default:
         cardColor = graphBlue;
     }
 
-    return Container(
-      // width: 180,
-      // height: 100,
-      padding: EdgeInsets.only(
-        top: 10,
-        left: 10,
-        bottom: 20,
-      ),
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            // 'Default Account',
-            acc.name,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
-          ),
-          Text(
-            // '0.00 SGD',
-            '${moneyFm.format(acc.balance)} ${acc.currency ?? 'SGD'}',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        acc == null
+            ? Navigator.pushNamed(context, "/newAccount")
+            : Navigator.pushNamed(context, "/accounts");
+      },
+      child: Container(
+        // width: 180,
+        // height: 100,
+        padding: EdgeInsets.only(
+          top: 10,
+          left: 10,
+          bottom: 20,
+        ),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: acc == null
+              ? MainAxisAlignment.center
+              : MainAxisAlignment.spaceBetween,
+          children: acc == null
+              ? <Widget>[
+                  Text(
+                    accCardType,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ]
+              : <Widget>[
+                  Text(
+                    // 'Default Account',
+                    acc.name,
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w400),
+                  ),
+                  Text(
+                    // '0.00 SGD',
+                    '${moneyFm.format(acc.balance)} ${acc.currency ?? 'SGD'}',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w700),
+                  ),
+                ],
+        ),
       ),
     );
   }
