@@ -1,16 +1,25 @@
-import 'package:Expenfilit/Controller/database_controller.dart';
+import 'package:Expenfilit/Controller/account.service.dart';
+import 'package:Expenfilit/Controller/auth.controller.dart';
 import 'package:Expenfilit/Model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 
-class AuthController {
+class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  //auth change user stream
+  Stream<SessionUser> get user {
+    return _auth
+        .authStateChanges() //onAuthStateChanged deprecated
+        //.map((User user) => _userFromFirebaseUser(user));
+        .map(_userFromFirebaseUser);
+  }
 
   // create user obj based on FirebaseUser
   SessionUser _userFromFirebaseUser(User user) {
     return user != null
         ? SessionUser(
-            uid: user.uid, email: user.email, displayName: user.displayName)
+            uid: user.uid, email: user.email, accName: user.displayName)
         : null;
   }
 
@@ -36,7 +45,7 @@ class AuthController {
 
   ///To create a new account with a valid email address.
   Future signupEmailPassword(
-      String email, String password, String displayName) async {
+      String email, String password, String accName) async {
     try {
       UserCredential authResult = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -53,10 +62,10 @@ class AuthController {
           await firebaseUser.sendEmailVerification();
           // create a new document for the user with the uid
 
-          final dbController = DatabaseController(userUid: firebaseUser.uid);
-          await dbController.updateUserData(
-              displayName, email, firebaseUser.uid);
-          await dbController.updateUserTxnData(
+          final dbController = AuthController(userUid: firebaseUser.uid);
+          final accSrvc = AccountService(firebaseUser.uid);
+          await dbController.updateUserData(accName, email, firebaseUser.uid);
+          await accSrvc.updateUserAccData(
               Uuid().v4(), "Default Account", null, null, firebaseUser.uid);
           return _userFromFirebaseUser(firebaseUser);
         }
@@ -76,14 +85,6 @@ class AuthController {
       print(e.toString());
       return null;
     }
-  }
-
-  //auth change user stream
-  Stream<SessionUser> get user {
-    return _auth
-        .authStateChanges() //onAuthStateChanged deprecated
-        //.map((User user) => _userFromFirebaseUser(user));
-        .map(_userFromFirebaseUser);
   }
 
   // sign in anon

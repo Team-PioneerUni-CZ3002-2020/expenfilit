@@ -139,7 +139,7 @@ class BluePatternHeader extends StatelessWidget {
                       children: [
                         Center(
                           child: Text(
-                            user.displayName ?? " ",
+                            user.accName ?? " ",
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,

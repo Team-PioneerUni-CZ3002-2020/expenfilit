@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:Expenfilit/Model/user.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'Controller/auth_controller.dart';
+import 'Controller/auth.service.dart';
 import 'View/wrapper.dart';
 
 ///Notify Auth, Review and Favourite Notifiers
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     ]);
 
     return StreamProvider<SessionUser>.value(
-      value: AuthController().user,
+      value: AuthService().user,
       child: MaterialApp(
         title: 'Expenfilit',
         theme: ThemeData(

@@ -1,11 +1,10 @@
 import 'package:Expenfilit/View/components/headers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:Expenfilit/View/components/colours.dart';
 
-class ManageAccountPage extends StatelessWidget {
-  const ManageAccountPage({Key key, this.setTabIndex, this.title})
-      : super(key: key);
-  final title;
+class AccountsDetailsPage extends StatelessWidget {
+  const AccountsDetailsPage({Key key, this.setTabIndex}) : super(key: key);
 
   final Function setTabIndex;
   @override
@@ -18,21 +17,10 @@ class ManageAccountPage extends StatelessWidget {
         child: Container(
           child: Column(children: <Widget>[
             WhiteTitleHeader(
-              title: title,
-              rightWidget: Container(
-                child: FlatButton(
-                  minWidth: 0,
-                  padding: EdgeInsets.only(right: 10),
-                  onPressed: () => print('save pressed'),
-                  child: Text(
-                    'SAVE',
-                    style: TextStyle(
-                        color: hghlgtBlue,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ),
-              ),
+              title: 'Accounts',
+              rightWidget: IconButton(
+                  icon: Icon(FlutterIcons.sliders_fea, color: hghlgtBlue),
+                  onPressed: null),
             ),
             SizedBox(height: 100),
             Center(

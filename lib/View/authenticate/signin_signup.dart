@@ -1,4 +1,4 @@
-import 'package:Expenfilit/Controller/auth_controller.dart';
+import 'package:Expenfilit/Controller/auth.service.dart';
 import 'package:flutter/material.dart';
 
 enum AuthMode { Signup, Login, Reset }
@@ -11,13 +11,13 @@ class Signinsignup extends StatefulWidget {
 }
 
 class _SigninsignupState extends State<Signinsignup> {
-  final AuthController _auth = AuthController();
+  AuthService _auth = AuthService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = new TextEditingController();
   AuthMode _authMode = AuthMode.Login;
   bool rState = true;
   bool spwState = true;
-  String displayName = '';
+  String accName = '';
   String email = '';
   String password = '';
   String errorMessage = ' ';
@@ -61,7 +61,7 @@ class _SigninsignupState extends State<Signinsignup> {
         _authMode = AuthMode.Login;
       });
     } else {
-      _auth.signupEmailPassword(email, password, displayName);
+      _auth.signupEmailPassword(email, password, accName);
       setState(() {
         _passwordController.clear(); //Clear value
         _authMode =
@@ -113,7 +113,7 @@ class _SigninsignupState extends State<Signinsignup> {
   }
 
   ///User's username text field with validation
-  Widget _buildDisplayNameField() {
+  Widget _buildaccNameField() {
     return TextFormField(
       decoration: InputDecoration(
         labelText: "Username (Display Name)",
@@ -132,7 +132,7 @@ class _SigninsignupState extends State<Signinsignup> {
         return null;
       },
       onSaved: (String value) {
-        displayName = value;
+        accName = value;
       },
     );
   }
@@ -235,7 +235,7 @@ class _SigninsignupState extends State<Signinsignup> {
         ),
         decoration: BoxDecoration(color: Colors.white54),
         child: Form(
-          autovalidate: true,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formKey,
           child: SingleChildScrollView(
             child: Padding(
@@ -258,7 +258,7 @@ class _SigninsignupState extends State<Signinsignup> {
                   ),
                   SizedBox(height: 25),
                   _authMode == AuthMode.Signup
-                      ? _buildDisplayNameField()
+                      ? _buildaccNameField()
                       : Container(),
                   _buildEmailField(),
                   _authMode == AuthMode.Reset

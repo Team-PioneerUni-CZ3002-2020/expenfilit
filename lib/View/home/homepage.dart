@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/widgets.dart';
-import 'package:Expenfilit/Controller/database_controller.dart';
+import 'package:Expenfilit/Controller/auth.controller.dart';
 import 'package:Expenfilit/Model/user.dart';
 import 'package:Expenfilit/View/components/navigator/model_destination.dart';
 import 'package:Expenfilit/View/components/navigator/navigator_destination.dart';
@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage>
     final user = Provider.of<SessionUser>(context);
 
     return StreamProvider<SessionUser>.value(
-      value: DatabaseController(userUid: user.uid).userData,
+      value: AuthController(userUid: user.uid).userData,
       child: Scaffold(
         backgroundColor: themeGreyWhite,
         body: SafeArea(

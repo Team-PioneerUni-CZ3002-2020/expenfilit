@@ -1,19 +1,23 @@
+import 'package:Expenfilit/Controller/account.controller.dart';
 import 'package:Expenfilit/View/components/headers.dart';
 import 'package:flutter/material.dart';
 import 'package:Expenfilit/View/components/colours.dart';
+import 'package:get/get.dart';
 
+import '../../Model/account.dart';
 import 'component_acc_cat.dart';
 
 class AddAccountPage extends StatelessWidget {
   const AddAccountPage({Key key, this.setTabIndex}) : super(key: key);
-
   final Function setTabIndex;
+
   @override
   Widget build(BuildContext context) {
+    AccountController accCtrl = Get.put(AccountController());
     const List<String> types = [
       "Bank Account",
       "Credit Card",
-      "Cash",
+      "Cash Wallet",
       "Loans",
       "Investments",
       "Insurance"
@@ -56,8 +60,14 @@ class AddAccountPage extends StatelessWidget {
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 15),
                 itemBuilder: (context, index) => AccGridCard(
-                  accCardType: types[index],
-                ),
+                    accCardType: types[index],
+                    press: () {
+                      // print('acctype pressed: ${types[index]}');
+                      accCtrl.updateAccType(types[index]);
+                      // Navigator.pushNamed(context, "/accounts/new");
+                      Navigator.pushNamed(context, "/accounts/new",
+                          arguments: new Account(type: types[index]));
+                    }),
               ),
             ),
           ]),

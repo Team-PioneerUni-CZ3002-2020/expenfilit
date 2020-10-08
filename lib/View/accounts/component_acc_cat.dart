@@ -13,9 +13,11 @@ class AccountCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final moneyFm = new NumberFormat.currency(symbol: "");
-    double accSum = accounts.map((a) => a.balance).fold(0, (p, c) => p + c);
-    String currency = accounts[0].currency ?? "SGD";
+    final moneyFm = new NumberFormat.simpleCurrency();
+    double accSum = accounts.length > 0
+        ? accounts.map((a) => a.balance).fold(0, (p, c) => p + c)
+        : 0;
+    // String currency = accounts[0].currency ?? "SGD";
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -31,7 +33,7 @@ class AccountCategory extends StatelessWidget {
                       fontWeight: FontWeight.w800,
                       fontSize: 14)),
               // Text('0.00 SGD',
-              Text('${moneyFm.format(accSum)} $currency',
+              Text('${moneyFm.format(accSum)}',
                   style: TextStyle(
                       color: themeDarkBlack,
                       fontWeight: FontWeight.w800,
@@ -50,6 +52,7 @@ class AccountCategory extends StatelessWidget {
                 crossAxisSpacing: 15),
             itemBuilder: (context, index) => AccGridCard(
               acc: accounts[index],
+              press: () => Navigator.pushNamed(context, "/accounts/details"),
             ),
           ),
         ],
@@ -72,7 +75,7 @@ class AccGridCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final moneyFm = new NumberFormat.currency(symbol: "");
+    final moneyFm = new NumberFormat.simpleCurrency();
 
     var cardColor = hghlgtBlue;
 
@@ -103,11 +106,7 @@ class AccGridCard extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () {
-        acc == null
-            ? Navigator.pushNamed(context, "/newAccount")
-            : Navigator.pushNamed(context, "/accounts");
-      },
+      onTap: press,
       child: Container(
         // width: 180,
         // height: 100,
@@ -145,7 +144,8 @@ class AccGridCard extends StatelessWidget {
                   ),
                   Text(
                     // '0.00 SGD',
-                    '${moneyFm.format(acc.balance)} ${acc.currency ?? 'SGD'}',
+                    // '${moneyFm.format(acc.balance)} ${acc.currency ?? 'SGD'}',
+                    '${moneyFm.format(acc.balance)}',
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.w700),
                   ),

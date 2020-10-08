@@ -11,3 +11,29 @@ const icUnselectGrey = Color(0xFF657786);
 const themeDarkBlack = Color(0xFF38444D);
 const themeDarkerBlack = Color(0xFF010838);
 const themeBlack = Color(0xFF15202B);
+
+Color catColour(String catType) {
+  switch (catType) {
+    case 'Bank Account':
+      return graphBlue;
+      break;
+    case 'Credit Card':
+      return hghlgtRed;
+      break;
+    case 'Investments':
+      return hghlgtYellow;
+      break;
+    case 'Loans':
+      return hghlgtGreen;
+      break;
+    case 'Cash Wallet':
+    case 'Cash':
+      return hghlgtBlue;
+      break;
+    case 'Insurance':
+      return icUnselectGrey;
+      break;
+    default:
+      return graphBlue;
+  }
+}

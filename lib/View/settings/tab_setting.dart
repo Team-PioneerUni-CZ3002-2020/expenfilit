@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:Expenfilit/Controller/auth_controller.dart';
+import 'package:Expenfilit/Controller/auth.service.dart';
 import 'package:Expenfilit/Model/user.dart';
 import 'package:Expenfilit/View/components/headers.dart';
 import 'package:Expenfilit/View/components/loading.dart';
@@ -9,7 +9,7 @@ import 'package:Expenfilit/View/components/colours.dart';
 class SettingsTab extends StatelessWidget {
   SettingsTab({Key key}) : super(key: key);
 
-  final AuthController _auth = AuthController();
+  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {

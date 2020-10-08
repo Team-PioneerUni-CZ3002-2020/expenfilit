@@ -1,10 +1,10 @@
 class SessionUser {
-  final String uid, displayName, email;
+  final String uid, accName, email;
   final int points;
 
   SessionUser({
     this.uid,
-    this.displayName,
+    this.accName,
     this.email,
     this.points,
   });

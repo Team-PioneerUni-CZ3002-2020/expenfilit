@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'model_destination.dart';
 import 'package:Expenfilit/View/components/navigator/route_tab.dart';
-import 'package:Expenfilit/View/accounts/page_accounts.dart';
-import 'package:Expenfilit/View/accounts/page_manage_acc.dart';
-import 'package:Expenfilit/View/accounts/page_add_acc.dart';
+import 'package:Expenfilit/View/accounts/page_acc_details.dart';
+import 'package:Expenfilit/View/accounts/page_acc_manage.dart';
+import 'package:Expenfilit/View/accounts/page_acc_add.dart';
 
 const List<Destination> allDestinations = <Destination>[
   Destination('Home', FlutterIcons.home_fea),
@@ -49,12 +49,14 @@ class _DestinationViewState extends State<DestinationNavigator> {
                   );
                 case '/addAccount':
                   return AddAccountPage();
-                case '/newAccount':
+                case '/accounts/new/type':
+                  return AccountListPage();
+                case '/accounts/new':
                   return ManageAccountPage(title: 'New Account');
-                case '/editAccount':
+                case '/accounts/edit':
                   return ManageAccountPage(title: 'Edit Account');
-                case '/accounts':
-                  return AccountsPage();
+                case '/accounts/details':
+                  return AccountsDetailsPage();
               }
             },
           );

@@ -5,13 +5,21 @@ import 'package:Expenfilit/View/components/colours.dart';
 class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.transparent,
-        child: Center(
-          child: SpinKitThreeBounce(
-            color: hghlgtYellow,
-            size: 40.0,
-          ),
-        ));
+    final height = MediaQuery.of(context).size.height;
+    // print(height);
+    return SizedBox(
+      // height: 300,
+      height: height,
+      child: Center(
+        child: Container(
+            color: Colors.transparent,
+            child: Center(
+              child: SpinKitThreeBounce(
+                color: hghlgtYellow,
+                size: 40.0,
+              ),
+            )),
+      ),
+    );
   }
 }
