@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:Expenfilit/Model/user.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'Controller/auth.service.dart';
 import 'View/wrapper.dart';
@@ -22,9 +23,11 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
+    SystemChrome.setEnabledSystemUIOverlays([]);
+
     return StreamProvider<SessionUser>.value(
       value: AuthService().user,
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'Expenfilit',
         theme: ThemeData(
           fontFamily: 'Inter',

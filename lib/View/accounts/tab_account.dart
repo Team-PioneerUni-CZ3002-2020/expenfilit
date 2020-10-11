@@ -17,20 +17,6 @@ class AccountsTab extends StatelessWidget {
     final user = Provider.of<SessionUser>(context);
     final AccountController accCon = AccountController();
 
-    // List<Account> accountsTest = [
-    //   // Account(name: "POSB", type: "Bank Account", balance: 0, currency: "SGD"),
-    //   Account(name: "POSB", type: "Bank Account", balance: 0),
-    //   Account(name: "StanChart", type: "Bank Account", balance: 311.92),
-    //   Account(name: "iPad Pro 256GB", type: "Credit Card", balance: -708.75),
-    //   Account(name: "Maybank", type: "Credit Card", balance: 0.02),
-    //   Account(name: "Singlife", type: "Investments", balance: 10859.79),
-    //   Account(name: "StashAway", type: "Investments", balance: 499.87),
-    //   Account(name: "iPad Pro 256GB", type: "Loans", balance: -708.75),
-    //   Account(name: "Maybank", type: "Loans", balance: 0.02),
-    //   Account(name: "Wallet", type: "Cash Wallet", balance: 0.00),
-    //   Account(name: "Grabfood Voucher", type: "Cash Wallet", balance: 10.0),
-    // ];
-
     // String assetSum = new NumberFormat.simpleCurrency()
     //     .format(accounts.map((a) => a.balance).fold(0.0, (p, c) => p + c));
 
@@ -38,6 +24,7 @@ class AccountsTab extends StatelessWidget {
         ? Loading()
         : StreamProvider<List<Account>>.value(
             value: AccountService(user.uid).accounts,
+            updateShouldNotify: (_, __) => true,
             child: Scaffold(
               backgroundColor: themeGreyWhite,
               body: NotificationListener<OverscrollIndicatorNotification>(
@@ -58,6 +45,7 @@ class AccountsTab extends StatelessWidget {
                                     assetSum: new NumberFormat.simpleCurrency()
                                         .format(accounts != null
                                             ? accounts
+                                                .where((a) => a?.isAssetSum)
                                                 .map((a) => a?.balance ?? 0)
                                                 .fold(0.0, (p, c) => p + c)
                                             : 0.0),
@@ -86,10 +74,8 @@ class AccountsTab extends StatelessWidget {
                                             side: BorderSide(
                                                 color: themeDarkerBlack,
                                                 width: 3)),
-                                        onPressed: () {
-                                          Navigator.pushNamed(
-                                              context, "/addAccount");
-                                        },
+                                        onPressed: () => Navigator.pushNamed(
+                                            context, "/addAccount"),
                                       ),
                                     ),
                                   )

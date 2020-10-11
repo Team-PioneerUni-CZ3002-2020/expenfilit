@@ -18,6 +18,8 @@ class Account {
     this.createdOn,
   });
 
+  set uuid(uid) => this.accUuid = uid;
+
   factory Account.fromSnapshot(DocumentSnapshot snap) {
     try {
       return Account(
@@ -37,7 +39,29 @@ class Account {
     }
   }
 
-  toJson() {
-    return {"name": name, "type": type, "balance": balance};
+  Account.fromJson(Map<String, dynamic> json)
+      : accUuid = json['accUuid'],
+        name = json['name'],
+        type = json['type'],
+        balance = json['balance'],
+        isAssetSum = json['isAssetSum'],
+        userUid = json['userUid'],
+        createdOn = DateTime.parse(json['createdOn']);
+
+  Map<String, dynamic> toJson() {
+    try {
+      return {
+        "accUuid": accUuid,
+        "name": name ?? "NO NAME",
+        "type": type ?? "NO TYPE RECEIVED",
+        "balance": balance ?? "NO BALANCE",
+        "isAssetSum": isAssetSum ?? true,
+        "userUid": userUid,
+        "createdOn": createdOn.toString(),
+      };
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
 }

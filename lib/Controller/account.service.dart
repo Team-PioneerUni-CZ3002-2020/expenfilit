@@ -23,7 +23,7 @@ class AccountService {
     }
   }
 
-  Future addOne(String userUid, Account acc) async {
+  Future<Account> addOne(Account acc) async {
     var result = await accountsRef.add({
       // 'accUuid': accountsRef.id,
       'accName': acc.name,
@@ -33,18 +33,16 @@ class AccountService {
       'userUid': userUid,
       'createdOn': new DateTime.now().toIso8601String(),
     });
-    return result;
+    acc.uuid = result.id;
+    return acc;
   }
 
-  Future updateUserAccData(String accUuid, String name, String type,
-      double balance, String userUid) async {
-    return await accountsRef.doc(accUuid).set({
-      'accUuid': accUuid,
-      'accName': name,
-      'accType': type == null ? "Wallet" : type,
-      'balance': balance == null ? 0.0 : balance,
-      'userUid': userUid,
-      'createdOn': new DateTime.now().toIso8601String(),
-    });
+  Future updateOne(Account acc) async {
+    accountsRef.doc(acc.accUuid).update(
+        {'accName': acc.name, 'accType': acc.type, 'balance': acc.balance});
+  }
+
+  deleteOne(String id) {
+    accountsRef.doc(id).delete();
   }
 }

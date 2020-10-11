@@ -94,7 +94,7 @@ class WhiteTitleHeader extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  rightWidget
+                  rightWidget == null ? SizedBox(width: 50) : rightWidget
                 ],
               ),
             ],
@@ -118,7 +118,6 @@ class BluePatternHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isSettingsTab = assetSum == null && user != null;
-
     return Container(
       height: (MediaQuery.of(context).size.height / 15) * 3,
       margin: EdgeInsets.only(bottom: isSettingsTab ? 0 : 15),
@@ -139,7 +138,7 @@ class BluePatternHeader extends StatelessWidget {
                       children: [
                         Center(
                           child: Text(
-                            user.accName ?? " ",
+                            user.username ?? " ",
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,

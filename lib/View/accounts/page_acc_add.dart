@@ -3,17 +3,19 @@ import 'package:Expenfilit/View/components/headers.dart';
 import 'package:flutter/material.dart';
 import 'package:Expenfilit/View/components/colours.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import '../../Model/account.dart';
+import '../../Model/user.dart';
 import 'component_acc_cat.dart';
 
 class AddAccountPage extends StatelessWidget {
-  const AddAccountPage({Key key, this.setTabIndex}) : super(key: key);
-  final Function setTabIndex;
+  const AddAccountPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    AccountController accCtrl = Get.put(AccountController());
+    final user = Provider.of<SessionUser>(context);
+    AccountController accCtrl = Get.put(AccountController(userUid: user.uid));
     const List<String> types = [
       "Bank Account",
       "Credit Card",
@@ -31,10 +33,7 @@ class AddAccountPage extends StatelessWidget {
         child: Container(
           child: Column(children: <Widget>[
             // -------- vvv HEADER vvv -------- //
-            WhiteTitleHeader(
-              title: 'Add Account',
-              rightWidget: SizedBox(width: 50),
-            ),
+            WhiteTitleHeader(title: 'Add Account'),
             // -------- ^^^ HEADER ^^^ -------- //
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 25),
@@ -63,6 +62,7 @@ class AddAccountPage extends StatelessWidget {
                     accCardType: types[index],
                     press: () {
                       // print('acctype pressed: ${types[index]}');
+                      accCtrl.refreshAccount();
                       accCtrl.updateAccType(types[index]);
                       // Navigator.pushNamed(context, "/accounts/new");
                       Navigator.pushNamed(context, "/accounts/new",

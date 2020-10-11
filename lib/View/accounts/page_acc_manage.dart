@@ -5,6 +5,7 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Expenfilit/View/components/colours.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -14,9 +15,9 @@ class ManageAccountPage extends StatelessWidget {
   ManageAccountPage({Key key, this.title}) : super(key: key);
   final title;
 
-  final AccountController accCtrl = Get.find();
   @override
   Widget build(BuildContext context) {
+    AccountController accCtrl = Get.find();
     final user = Provider.of<SessionUser>(context);
     final AccountService accSrvc = Get.put(AccountService(user.uid));
     return Scaffold(
@@ -49,7 +50,7 @@ class ManageAccountPage extends StatelessWidget {
                           ),
                           SizedBox(height: 15),
                           TextField(
-                            onChanged: (text) => accCtrl.updateAccName(text),
+                            controller: accCtrl.accNameField,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -79,15 +80,16 @@ class ManageAccountPage extends StatelessWidget {
                     ),
                   )),
               WhiteTitleHeader(
-                title: "New Account",
-                // title: widget.title, //EDIT
+                title: this.title,
                 rightWidget: Container(
                   child: FlatButton(
                     minWidth: 0,
                     padding: EdgeInsets.only(right: 10),
-                    onPressed: () {
-                      print("save pressed");
-                      accSrvc.addOne(user.uid, accCtrl.acc());
+                    onPressed: () async {
+                      this.title == "New Account"
+                          ? await accCtrl.manAccount("add")
+                          : await accCtrl.manAccount("edit");
+
                       Navigator.popAndPushNamed(context, '/');
                     },
                     child: Text(
@@ -139,8 +141,7 @@ class ManageAccountPage extends StatelessWidget {
                             SizedBox(width: 2),
                             Expanded(
                               child: TextField(
-                                  onChanged: (text) =>
-                                      accCtrl.updateAccBal(double.parse(text)),
+                                  controller: accCtrl.accBalanceField,
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                       color: icUnselectGrey,
@@ -187,12 +188,7 @@ class ManageAccountPage extends StatelessWidget {
                   //   tileColor: Colors.white,
                   // ),
                   ListTile(
-                    onTap: () async {
-                      // String accType = await Navigator.pushNamed(
-                      //     context, "/addAccount/accType");
-                      // Get.find<AccountController>().updateAccType(accType);
-                      // widget.acc.type = await Navigator.pushNamed(
-                      //     context, "/addAccount/accType");
+                    onTap: () {
                       Navigator.pushNamed(context, "/accounts/new/type");
                     },
                     title: Row(
@@ -246,32 +242,38 @@ class ManageAccountPage extends StatelessWidget {
                           ),
                           SizedBox(height: 100),
                           // EDIT
-                          // widget.title == "Edit Account"
-                          //     ? FlatButton(
-                          //         onPressed: null,
-                          //         child: Row(
-                          //           mainAxisAlignment: MainAxisAlignment.center,
-                          //           crossAxisAlignment: CrossAxisAlignment.center,
-                          //           children: <Widget>[
-                          //             Icon(
-                          //               FlutterIcons.trash_2_fea,
-                          //               size: 16,
-                          //               color: hghlgtRed,
-                          //             ),
-                          //             SizedBox(width: 5),
-                          //             Text(
-                          //               'Delete Account',
-                          //               style: TextStyle(
-                          //                 decoration: TextDecoration.underline,
-                          //                 color: hghlgtRed,
-                          //                 fontWeight: FontWeight.w700,
-                          //                 fontSize: 16,
-                          //               ),
-                          //             )
-                          //           ],
-                          //         ),
-                          //       )
-                          //     : Opacity(opacity: 0)
+                          this.title == "Edit Account"
+                              ? FlatButton(
+                                  onPressed: () async {
+                                    String uid = accCtrl.acc().accUuid;
+                                    print(uid);
+                                    await accCtrl.deleteAccount(uid);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Icon(
+                                        FlutterIcons.trash_2_fea,
+                                        size: 16,
+                                        color: hghlgtRed,
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        'Delete Account',
+                                        style: TextStyle(
+                                          decoration: TextDecoration.underline,
+                                          color: hghlgtRed,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : Opacity(opacity: 0)
                         ],
                       ),
                     ),

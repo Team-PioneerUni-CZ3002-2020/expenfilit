@@ -1,8 +1,8 @@
 import 'package:Expenfilit/Controller/account.service.dart';
 import 'package:Expenfilit/Controller/auth.controller.dart';
 import 'package:Expenfilit/Model/user.dart';
+import 'package:Expenfilit/Model/account.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:uuid/uuid.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -19,7 +19,7 @@ class AuthService {
   SessionUser _userFromFirebaseUser(User user) {
     return user != null
         ? SessionUser(
-            uid: user.uid, email: user.email, accName: user.displayName)
+            uid: user.uid, email: user.email, username: user.displayName)
         : null;
   }
 
@@ -29,6 +29,7 @@ class AuthService {
       UserCredential authResult = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User firebaseUser = authResult.user;
+      print(firebaseUser);
       return _userFromFirebaseUser(firebaseUser);
     } catch (e) {
       print(e.toString());
@@ -60,14 +61,24 @@ class AuthService {
           print("Sign up: $firebaseUser");
 
           await firebaseUser.sendEmailVerification();
-          // create a new document for the user with the uid
-
           final dbController = AuthController(userUid: firebaseUser.uid);
           final accSrvc = AccountService(firebaseUser.uid);
-          await dbController.updateUserData(accName, email, firebaseUser.uid);
-          await accSrvc.updateUserAccData(
-              Uuid().v4(), "Default Account", null, null, firebaseUser.uid);
-          return _userFromFirebaseUser(firebaseUser);
+          SessionUser newUser;
+          accSrvc
+              .addOne(Account(
+                  // accUuid: snap.id,
+                  name: 'Default Account',
+                  type: 'Cash Wallet',
+                  balance: 0.0,
+                  isAssetSum: true,
+                  userUid: firebaseUser.uid,
+                  createdOn: DateTime.now()))
+              .then((value) async {
+            newUser =
+                await dbController.addOne(accName, email, firebaseUser.uid);
+          });
+
+          return newUser;
         }
       }
     } catch (e) {
