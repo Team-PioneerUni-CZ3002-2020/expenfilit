@@ -1,5 +1,6 @@
 import 'package:Expenfilit/Controller/account.controller.dart';
 import 'package:Expenfilit/View/components/headers.dart';
+import 'package:Expenfilit/View/components/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:Expenfilit/View/components/colours.dart';
@@ -12,17 +13,14 @@ import '../../Model/account.dart';
 import '../../Model/user.dart';
 
 class AccountsDetailsPage extends StatelessWidget {
-  AccountsDetailsPage({Key key}) : super(key: key);
+  final int accIdx;
+  AccountsDetailsPage({
+    Key key,
+    @required this.accIdx,
+  }) : super(key: key);
 
   SwiperController controller = new SwiperController();
 
-  List<bool> autoplayes = new List()
-    ..length = 10
-    ..fillRange(0, 10, false);
-
-  List<SwiperController> controllers = new List()
-    ..length = 10
-    ..fillRange(0, 10, new SwiperController());
   @override
   Widget build(BuildContext context) {
     // List<Account> accountsTest = [
@@ -50,24 +48,28 @@ class AccountsDetailsPage extends StatelessWidget {
             Stack(children: [
               Obx(
                 () => SizedBox(
-                  height: (MediaQuery.of(context).size.height / 10) * 3.4,
-                  child: new Swiper(
-                    loop: false,
-                    itemCount: accCtrl.accounts.length,
-                    viewportFraction: 0.8,
-                    scale: 0.9,
-                    controller: controller,
-                    itemBuilder: (BuildContext context, int index) {
-                      return CardAccount(accCtrl.accounts.elementAt(index));
-                    },
-                  ),
+                  height: 265.0,
+                  child: accCtrl.accounts != null && accCtrl.accounts.length > 0
+                      ? (new Swiper(
+                          loop: false,
+                          itemCount: accCtrl.accounts.length,
+                          index: accIdx,
+                          viewportFraction: 0.8,
+                          scale: 0.9,
+                          controller: controller,
+                          itemBuilder: (BuildContext context, int index) {
+                            return CardAccount(
+                                accCtrl.accounts.elementAt(index));
+                          },
+                        ))
+                      : Loading(),
                 ),
               ),
               WhiteTitleHeader(
                 title: 'Accounts',
-                // rightWidget: IconButton(
-                //     icon: Icon(FlutterIcons.sliders_fea, color: hghlgtBlue),
-                //     onPressed: null),
+                rightWidget: IconButton(
+                    icon: Icon(FlutterIcons.sliders_fea, color: hghlgtBlue),
+                    onPressed: null),
               ),
             ]),
             Expanded(
@@ -128,7 +130,7 @@ class CardAccount extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 10, top: 20, bottom: 15),
+            padding: const EdgeInsets.only(left: 10, top: 20, bottom: 12),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,

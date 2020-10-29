@@ -1,3 +1,4 @@
+import 'package:Expenfilit/View/accounts/component_acc_cat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'model_destination.dart';
@@ -39,6 +40,7 @@ class _DestinationViewState extends State<DestinationNavigator> {
         key: _navigatorKey,
         initialRoute: '/',
         onGenerateRoute: (RouteSettings settings) {
+          final AccDetailsArguments accDetailsArgs = settings.arguments;
           return MaterialPageRoute(
             settings: settings,
             builder: (BuildContext context) {
@@ -56,7 +58,7 @@ class _DestinationViewState extends State<DestinationNavigator> {
                 case '/accounts/edit':
                   return ManageAccountPage(title: 'Edit Account');
                 case '/accounts/details':
-                  return AccountsDetailsPage();
+                  return AccountsDetailsPage(accIdx: accDetailsArgs.accIdx);
               }
             },
           );

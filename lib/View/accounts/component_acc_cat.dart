@@ -5,10 +5,12 @@ import 'package:Expenfilit/View/components/colours.dart';
 
 class AccountCategory extends StatelessWidget {
   final List<Account> accounts;
+  final List<int> accIdx;
 
   const AccountCategory({
     Key key,
     this.accounts,
+    this.accIdx,
   }) : super(key: key);
 
   @override
@@ -52,7 +54,12 @@ class AccountCategory extends StatelessWidget {
                 crossAxisSpacing: 15),
             itemBuilder: (context, index) => AccGridCard(
               acc: accounts[index],
-              press: () => Navigator.pushNamed(context, "/accounts/details"),
+              index: accIdx[index],
+              press: () {
+                print(accIdx[index]);
+                Navigator.pushNamed(context, "/accounts/details",
+                    arguments: AccDetailsArguments(accIdx[index]));
+              },
             ),
           ),
         ],
@@ -61,15 +68,22 @@ class AccountCategory extends StatelessWidget {
   }
 }
 
+class AccDetailsArguments {
+  final int accIdx;
+  AccDetailsArguments(this.accIdx);
+}
+
 class AccGridCard extends StatelessWidget {
   final String accCardType;
   final Account acc;
+  final int index;
   final Function press;
 
   const AccGridCard({
     Key key,
     this.accCardType,
     this.acc,
+    this.index,
     this.press,
   }) : super(key: key);
 

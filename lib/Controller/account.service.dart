@@ -13,6 +13,7 @@ class AccountService {
     try {
       return accountsRef
           .where("userUid", isEqualTo: userUid)
+          .orderBy('accType')
           .get()
           .then((value) {
         return value.docs.map((e) => Account.fromSnapshot(e)).toList();

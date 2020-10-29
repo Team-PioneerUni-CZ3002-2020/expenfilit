@@ -2,7 +2,6 @@ import 'package:Expenfilit/Controller/account.service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Model/account.dart';
-import 'package:intl/intl.dart';
 import '../View/accounts/component_acc_cat.dart';
 
 class AccountController extends GetxController {
@@ -40,20 +39,23 @@ class AccountController extends GetxController {
 
   List<Widget> getAccountCategories(List<Account> accs) {
     try {
+      int uiIdx = 0;
       List<Widget> cats = [];
       for (var t in [
         "Bank Account",
+        "Cash Wallet",
         "Credit Card",
+        "Insurance",
         "Investments",
         "Loans",
-        "Cash Wallet",
-        "Insurance"
       ]) {
         // print(accounts.where((acc) => acc.type == t).toList()[0].type);
         if (accs != null && accs.length > 0) {
+          List<int> uiIdxes = [];
           List<Account> accList = accs.where((acc) => acc.type == t).toList();
+          accList.forEach((a) => uiIdxes.add(uiIdx++));
           if (accList != null && accList.length > 0) {
-            cats.add(AccountCategory(accounts: accList));
+            cats.add(AccountCategory(accounts: accList, accIdx: uiIdxes));
           } else
             cats.add(Opacity(opacity: 0));
         }
